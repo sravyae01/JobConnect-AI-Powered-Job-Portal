@@ -36,7 +36,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/employer/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/employer/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/dashboard-stats/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/dashboard-stats/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("access");
 
       await axios.delete(
-        `http://127.0.0.1:8000/api/jobs/${id}/delete/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/${id}/delete/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -24,7 +24,7 @@ const MyApplications = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/applications/my/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/my/",
         {
           headers: {
             Authorization: `Bearer ${token}`,

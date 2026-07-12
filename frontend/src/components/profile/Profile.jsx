@@ -38,7 +38,7 @@ const Profile = () => {
     }
 
     const response = await axios.get(
-      "http://127.0.0.1:8000/api/users/profile/",
+      "https://jobconnect-ai-powered-job-portal.onrender.com/api/users/profile/",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +80,7 @@ const Profile = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.patch(
-        "http://127.0.0.1:8000/api/users/profile/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/users/profile/",
         {
           first_name: formData.first_name,
           last_name: formData.last_name,
@@ -139,7 +139,7 @@ const handleResumeUpload = async () => {
     data.append("resume", resume);
 
     await axios.post(
-      "http://127.0.0.1:8000/api/users/upload-resume/",
+      "https://jobconnect-ai-powered-job-portal.onrender.com/api/users/upload-resume/",
       data,
       {
         headers: {
@@ -286,7 +286,7 @@ if (!user) {
   href={
     user.profile.resume.startsWith("http")
       ? user.profile.resume
-      : `http://127.0.0.1:8000${user.profile.resume}`
+      : `https://jobconnect-ai-powered-job-portal.onrender.com${user.profile.resume}`
   }
   target="_blank"
   rel="noopener noreferrer"

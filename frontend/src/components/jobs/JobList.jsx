@@ -41,7 +41,7 @@ const JobList = () => {
       console.log("Request Params:", params);
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/",
         {
           params,
         }

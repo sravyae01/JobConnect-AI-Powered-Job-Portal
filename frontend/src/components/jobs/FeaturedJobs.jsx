@@ -17,7 +17,7 @@ const FeaturedJobs = () => {
   const fetchFeaturedJobs = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/"
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/"
       );
 
       // Show only first 4 jobs

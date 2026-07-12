@@ -19,7 +19,7 @@ const SavedJobs = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/applications/saved/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/saved/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ const SavedJobs = () => {
       const token = localStorage.getItem("access");
 
       await axios.delete(
-        `http://127.0.0.1:8000/api/applications/unsave/${jobId}/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/unsave/${jobId}/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

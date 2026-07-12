@@ -163,7 +163,7 @@ python manage.py runserver
 Backend will run on:
 
 ```
-http://127.0.0.1:8000/
+https://jobconnect-ai-powered-job-portal.onrender.com/
 ```
 
 ---

@@ -21,7 +21,7 @@ const JobDetail = () => {
   const fetchJob = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/jobs/${id}/`
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/${id}/`
       );
 
       setJob(response.data);
@@ -39,7 +39,7 @@ const JobDetail = () => {
       const token = localStorage.getItem("access");
 
       await axios.post(
-        `http://127.0.0.1:8000/api/applications/apply/${id}/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/apply/${id}/`,
         {},
         {
           headers: {
@@ -68,7 +68,7 @@ const JobDetail = () => {
       const token = localStorage.getItem("access");
 
       await axios.post(
-        `http://127.0.0.1:8000/api/applications/save/${id}/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/save/${id}/`,
         {},
         {
           headers: {

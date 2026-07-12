@@ -14,7 +14,7 @@ const Hero = () => {
   const fetchPopularSearches = async () => {
     try {
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/popular-searches/"
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/popular-searches/"
       );
 
       setPopularSearches(response.data);

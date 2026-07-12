@@ -19,7 +19,7 @@ const Applicants = () => {
       const token = localStorage.getItem("access");
 
       const response = await axios.get(
-        "http://127.0.0.1:8000/api/applications/employer/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/employer/",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ const Applicants = () => {
       const token = localStorage.getItem("access");
 
       await axios.patch(
-        `http://127.0.0.1:8000/api/applications/${applicationId}/status/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/applications/${applicationId}/status/`,
         {
           status,
         },

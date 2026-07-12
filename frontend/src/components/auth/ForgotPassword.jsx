@@ -21,7 +21,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/users/send-reset-otp/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/users/send-reset-otp/",
         {
           email,
         }

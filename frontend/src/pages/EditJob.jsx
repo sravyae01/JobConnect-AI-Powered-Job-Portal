@@ -35,7 +35,7 @@ const EditJob = () => {
   const fetchJob = async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/jobs/${id}/`
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/${id}/`
       );
 
       setFormData({
@@ -64,7 +64,7 @@ const EditJob = () => {
   const fetchCategories = async () => {
     try {
       const res = await axios.get(
-        "http://127.0.0.1:8000/api/jobs/categories/"
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/categories/"
       );
 
       setCategories(res.data.results);
@@ -89,7 +89,7 @@ const EditJob = () => {
       const token = localStorage.getItem("access");
 
       await axios.put(
-        `http://127.0.0.1:8000/api/jobs/${id}/update/`,
+        `https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/${id}/update/`,
         formData,
         {
           headers: {

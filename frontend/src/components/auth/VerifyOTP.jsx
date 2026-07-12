@@ -29,7 +29,7 @@ const VerifyOTP = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/users/verify-reset-otp/",
+        "https://jobconnect-ai-powered-job-portal.onrender.com/api/users/verify-reset-otp/",
         {
           email,
           otp,
