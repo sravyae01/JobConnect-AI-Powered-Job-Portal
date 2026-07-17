@@ -67,6 +67,8 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
         return Response(serializer.data)
 
+import cloudinary.uploader
+
 class ResumeUploadView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -79,12 +81,18 @@ class ResumeUploadView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        profile.resume = request.FILES["resume"]
+        uploaded = cloudinary.uploader.upload(
+            request.FILES["resume"],
+            resource_type="raw",
+            folder="resumes"
+        )
+
+        profile.resume = uploaded["secure_url"]
         profile.save()
 
         return Response({
             "message": "Resume uploaded successfully",
-            "resume": profile.resume.url
+            "resume": uploaded["secure_url"]
         })
 
 class SendResetOTPView(APIView):
