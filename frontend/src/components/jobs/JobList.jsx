@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
@@ -20,66 +20,70 @@ const JobList = () => {
   const [employmentType, setEmploymentType] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
 
+  // Debounced Search
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Read URL parameters
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
     setLocation(searchParams.get("location") || "");
   }, [searchParams]);
 
-  const fetchJobs = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      const params = {};
-
-      if (search) params.search = search;
-      if (location) params.location = location;
-      if (employmentType)
-        params.employment_type = employmentType;
-      if (experienceLevel)
-        params.experience_level = experienceLevel;
-
-      console.log("Request Params:", params);
-
-      const response = await axios.get(API_URL, {
-        params,
-      });
-
-      console.log("Full API Response:", response.data);
-
-      let jobsData = [];
-
-      if (Array.isArray(response.data)) {
-        jobsData = response.data;
-      } else if (
-        response.data &&
-        Array.isArray(response.data.results)
-      ) {
-        jobsData = response.data.results;
-      }
-
-      console.log("Jobs Received:", jobsData);
-
-      setJobs(jobsData);
-    } catch (error) {
-      console.error("Failed to fetch jobs");
-      console.error(error);
-
-      if (error.response) {
-        console.log(error.response.data);
-      }
-
-      setJobs([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [search, location, employmentType, experienceLevel]);
-
+  // Debounce Search (500ms)
   useEffect(() => {
-    fetchJobs();
-  }, [fetchJobs]);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
-  console.log("Jobs State:", jobs);
-  
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // Fetch Jobs
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+
+        const params = {};
+
+        if (debouncedSearch) params.search = debouncedSearch;
+        if (location) params.location = location;
+        if (employmentType)
+          params.employment_type = employmentType;
+        if (experienceLevel)
+          params.experience_level = experienceLevel;
+
+        const response = await axios.get(API_URL, {
+          params,
+        });
+
+        let jobsData = [];
+
+        if (Array.isArray(response.data)) {
+          jobsData = response.data;
+        } else if (
+          response.data &&
+          Array.isArray(response.data.results)
+        ) {
+          jobsData = response.data.results;
+        }
+
+        setJobs(jobsData);
+      } catch (error) {
+        console.error("Failed to fetch jobs:", error);
+        setJobs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [
+    debouncedSearch,
+    location,
+    employmentType,
+    experienceLevel,
+  ]);
 
   return (
     <div className="bg-gray-100 min-h-screen py-10">

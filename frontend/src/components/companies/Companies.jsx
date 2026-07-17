@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import API from "../../services/api";
+import Loader from "../common/Loader";
 
 const companyLogos = {
   Google: "https://logo.clearbit.com/google.com",
@@ -19,6 +21,7 @@ const Companies = () => {
 
   const [companies, setCompanies] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCompanies();
@@ -26,9 +29,9 @@ const Companies = () => {
 
   const fetchCompanies = async () => {
     try {
-      const response = await axios.get(
-        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/"
-      );
+      setLoading(true);
+
+      const response = await API.get("/jobs/");
 
       const jobs = response.data.results || response.data;
 
@@ -48,17 +51,28 @@ const Companies = () => {
       });
 
       setCompanies(Object.values(companyMap));
+
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error("Unable to load companies.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filteredCompanies = companies.filter((company) =>
-    company.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredCompanies = useMemo(() => {
+    return companies.filter((company) =>
+      company.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [companies, search]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
+
       <div className="max-w-7xl mx-auto px-6">
 
         <h1 className="text-4xl font-bold text-center mb-3">
@@ -70,6 +84,7 @@ const Companies = () => {
         </p>
 
         <div className="max-w-xl mx-auto mb-10">
+
           <input
             type="text"
             placeholder="Search company..."
@@ -77,28 +92,38 @@ const Companies = () => {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full border rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
           {filteredCompanies.length === 0 ? (
+
             <div className="col-span-3 bg-white rounded-xl shadow p-10 text-center">
+
               <h2 className="text-2xl font-bold">
                 No Companies Found
               </h2>
+
             </div>
+
           ) : (
+
             filteredCompanies.map((company) => {
+
               const logo = companyLogos[company.name];
 
               return (
+
                 <div
-                  key={company.name}
-                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition p-6"
+                  key={company.id}
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 p-6"
                 >
+
                   <div className="flex items-center gap-4">
 
                     {logo ? (
+
                       <img
                         src={logo}
                         alt={company.name}
@@ -108,16 +133,20 @@ const Companies = () => {
                           e.target.nextSibling.style.display = "flex";
                         }}
                       />
+
                     ) : null}
 
                     <div
                       className="w-16 h-16 rounded-xl bg-blue-600 text-white items-center justify-center text-2xl font-bold"
-                      style={{ display: logo ? "none" : "flex" }}
+                      style={{
+                        display: logo ? "none" : "flex",
+                      }}
                     >
-                      {company.name.charAt(0)}
+                      {(company.name || "C").charAt(0).toUpperCase()}
                     </div>
 
                     <div>
+
                       <h2 className="text-2xl font-bold">
                         {company.name}
                       </h2>
@@ -125,33 +154,40 @@ const Companies = () => {
                       <p className="text-gray-500">
                         📍 {company.location}
                       </p>
+
                     </div>
 
                   </div>
 
                   <p className="text-blue-600 font-semibold mt-6">
-                    {company.jobs} Open Job{company.jobs > 1 ? "s" : ""}
+                    {company.jobs} Open Job
+                    {company.jobs > 1 ? "s" : ""}
                   </p>
 
                   <button
                     onClick={() =>
                       navigate(
-                        `/jobs?search=${encodeURIComponent(company.name)}`
+                        `/jobs?search=${encodeURIComponent(
+                          company.name
+                        )}`
                       )
                     }
-                    className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl"
+                    className="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl transition"
                   >
                     View Jobs
                   </button>
 
                 </div>
+
               );
             })
+
           )}
 
         </div>
 
       </div>
+
     </div>
   );
 };
