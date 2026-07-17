@@ -10,9 +10,14 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import timedelta
+import cloudinary.uploader
 
 User = get_user_model()
 
+
+# ==========================
+# Register
+# ==========================
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -22,15 +27,19 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        
+
         refresh = RefreshToken.for_user(user)
-        
+
         return Response({
-            'user': UserSerializer(user).data,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            "user": UserSerializer(user).data,
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
         }, status=status.HTTP_201_CREATED)
 
+
+# ==========================
+# Login
+# ==========================
 class LoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -38,16 +47,21 @@ class LoginView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        
+
+        user = serializer.validated_data["user"]
+
         refresh = RefreshToken.for_user(user)
-        
+
         return Response({
-            'user': UserSerializer(user).data,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            "user": UserSerializer(user).data,
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
         })
 
+
+# ==========================
+# User Profile
+# ==========================
 class UserProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
@@ -67,8 +81,10 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
         return Response(serializer.data)
 
-import cloudinary.uploader
 
+# ==========================
+# Resume Upload
+# ==========================
 class ResumeUploadView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -95,6 +111,10 @@ class ResumeUploadView(APIView):
             "resume": uploaded["secure_url"]
         })
 
+
+# ==========================
+# Send Reset OTP
+# ==========================
 class SendResetOTPView(APIView):
     permission_classes = [AllowAny]
 
@@ -110,18 +130,16 @@ class SendResetOTPView(APIView):
         try:
             user = User.objects.get(email=email)
 
-            # Generate 6-digit OTP
             otp = str(random.randint(100000, 999999))
 
-            # Save OTP
             user.reset_otp = otp
             user.otp_created_at = timezone.now()
             user.save()
 
-            # Send Email
-            send_mail(
-                subject="JobConnect Password Reset OTP",
-                message=f"""
+            try:
+                send_mail(
+                    subject="JobConnect Password Reset OTP",
+                    message=f"""
 Hello {user.username},
 
 Your OTP for resetting your JobConnect password is:
@@ -135,17 +153,27 @@ If you did not request this, please ignore this email.
 Regards,
 JobConnect Team
 """,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email],
-                fail_silently=False,
-            )
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
 
-            return Response(
-                {
-                    "message": "OTP sent successfully."
-                },
-                status=status.HTTP_200_OK
-            )
+                print("EMAIL SENT SUCCESSFULLY")
+
+                return Response(
+                    {"message": "OTP sent successfully."},
+                    status=status.HTTP_200_OK
+                )
+
+            except Exception as e:
+                print("EMAIL ERROR:", repr(e))
+
+                return Response(
+                    {
+                        "error": str(e)
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
 
         except User.DoesNotExist:
             return Response(
@@ -155,6 +183,10 @@ JobConnect Team
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
+# ==========================
+# Verify OTP
+# ==========================
 class VerifyResetOTPView(APIView):
     permission_classes = [AllowAny]
 
@@ -173,16 +205,13 @@ class VerifyResetOTPView(APIView):
 
             print("Entered OTP :", repr(otp))
             print("Stored OTP  :", repr(user.reset_otp))
-            print("Email        :", email)
 
-            # Verify OTP
             if str(user.reset_otp).strip() != otp:
                 return Response(
                     {"error": "Invalid OTP."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Verify Expiry
             if timezone.now() > user.otp_created_at + timedelta(minutes=5):
                 return Response(
                     {"error": "OTP has expired."},
@@ -204,6 +233,10 @@ class VerifyResetOTPView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
+# ==========================
+# Reset Password
+# ==========================
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
 
@@ -221,24 +254,19 @@ class ResetPasswordView(APIView):
         try:
             user = User.objects.get(email__iexact=email.strip())
 
-            # Verify OTP
             if str(user.reset_otp).strip() != otp:
                 return Response(
                     {"error": "Invalid OTP."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Check OTP expiry
             if timezone.now() > user.otp_created_at + timedelta(minutes=5):
                 return Response(
                     {"error": "OTP has expired."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Update password
             user.set_password(password)
-
-            # Clear OTP
             user.reset_otp = None
             user.otp_created_at = None
             user.save()
