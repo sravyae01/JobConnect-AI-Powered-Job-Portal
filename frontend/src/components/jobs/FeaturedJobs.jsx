@@ -1,33 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import JobCard from "./JobCard";
 import Loader from "../common/Loader";
+import { useJobs } from "../../context/JobContext";
 
 const FeaturedJobs = () => {
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const { jobs, loading } = useJobs();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchFeaturedJobs();
-  }, []);
-
-  const fetchFeaturedJobs = async () => {
-    try {
-      const response = await axios.get(
-        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/"
-      );
-
-      // Show only first 4 jobs
-      setJobs(response.data.results.slice(0, 4));
-    } catch (error) {
-      console.log(error.response?.data);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const featuredJobs = jobs.slice(0, 4);
 
   if (loading) {
     return <Loader />;
@@ -58,7 +39,7 @@ const FeaturedJobs = () => {
 
         </div>
 
-        {jobs.length === 0 ? (
+        {featuredJobs.length === 0 ? (
 
           <div className="bg-white rounded-xl shadow p-8 text-center mt-10">
             <h3 className="text-2xl font-semibold">
@@ -74,7 +55,7 @@ const FeaturedJobs = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
 
-            {jobs.map((job) => (
+            {featuredJobs.map((job) => (
               <JobCard
                 key={job.id}
                 job={job}

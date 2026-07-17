@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import CompanyCard from "./CompanyCard";
+import { useJobs } from "../../context/JobContext";
 
 const logos = {
   Google: "https://logo.clearbit.com/google.com",
@@ -15,40 +15,34 @@ const logos = {
 };
 
 const TopCompanies = () => {
-  const [companies, setCompanies] = useState([]);
+  const { jobs, loading } = useJobs();
 
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
+  const companyMap = {};
 
-  const fetchCompanies = async () => {
-    try {
-      const response = await axios.get(
-        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/"
-      );
-
-      const jobs = response.data.results || response.data;
-
-      const companyMap = {};
-
-      jobs.forEach((job) => {
-        if (!companyMap[job.company]) {
-          companyMap[job.company] = {
-            company: job.company,
-            location: job.location,
-            jobs: 1,
-            logo: logos[job.company] || null,
-          };
-        } else {
-          companyMap[job.company].jobs += 1;
-        }
-      });
-
-      setCompanies(Object.values(companyMap));
-    } catch (error) {
-      console.log(error);
+  jobs.forEach((job) => {
+    if (!companyMap[job.company]) {
+      companyMap[job.company] = {
+        company: job.company,
+        location: job.location,
+        jobs: 1,
+        logo: logos[job.company] || null,
+      };
+    } else {
+      companyMap[job.company].jobs += 1;
     }
-  };
+  });
+
+  const companies = Object.values(companyMap);
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gray-50">
+        <div className="text-center">
+          Loading companies...
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gray-50">
