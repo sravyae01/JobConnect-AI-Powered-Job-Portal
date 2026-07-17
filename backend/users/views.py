@@ -115,6 +115,9 @@ class ResumeUploadView(APIView):
 # ==========================
 # Send Reset OTP
 # ==========================
+# ==========================
+# Send Reset OTP
+# ==========================
 class SendResetOTPView(APIView):
     permission_classes = [AllowAny]
 
@@ -128,15 +131,27 @@ class SendResetOTPView(APIView):
             )
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email__iexact=email.strip())
 
+            # Generate OTP
             otp = str(random.randint(100000, 999999))
 
+            # Save OTP
             user.reset_otp = otp
             user.otp_created_at = timezone.now()
             user.save()
 
+            print("=" * 50)
+            print("OTP Generated:", otp)
+            print("Sending email to:", email)
+            print("EMAIL_HOST:", settings.EMAIL_HOST)
+            print("EMAIL_PORT:", settings.EMAIL_PORT)
+            print("EMAIL_USER:", settings.EMAIL_HOST_USER)
+            print("=" * 50)
+
             try:
+                print("STEP 1 : Calling send_mail()")
+
                 send_mail(
                     subject="JobConnect Password Reset OTP",
                     message=f"""
@@ -158,7 +173,7 @@ JobConnect Team
                     fail_silently=False,
                 )
 
-                print("EMAIL SENT SUCCESSFULLY")
+                print("STEP 2 : EMAIL SENT SUCCESSFULLY")
 
                 return Response(
                     {"message": "OTP sent successfully."},
@@ -166,23 +181,20 @@ JobConnect Team
                 )
 
             except Exception as e:
-                print("EMAIL ERROR:", repr(e))
+                print("EMAIL EXCEPTION")
+                print(type(e))
+                print(repr(e))
 
                 return Response(
-                    {
-                        "error": str(e)
-                    },
+                    {"error": str(e)},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
         except User.DoesNotExist:
             return Response(
-                {
-                    "error": "No account found with this email."
-                },
+                {"error": "No account found with this email."},
                 status=status.HTTP_404_NOT_FOUND
             )
-
 
 # ==========================
 # Verify OTP
