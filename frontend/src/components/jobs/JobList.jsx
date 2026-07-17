@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 
@@ -6,29 +6,29 @@ import JobSearchBar from "./JobSearchBar";
 import FilterSidebar from "./FilterSidebar";
 import JobCard from "./JobCard";
 
+const API_URL =
+  "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/";
+
 const JobList = () => {
   const [searchParams] = useSearchParams();
 
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
   const [employmentType, setEmploymentType] = useState("");
   const [experienceLevel, setExperienceLevel] = useState("");
 
-  // Read URL parameters
   useEffect(() => {
     setSearch(searchParams.get("search") || "");
     setLocation(searchParams.get("location") || "");
   }, [searchParams]);
 
-  // Fetch jobs whenever filters change
-  useEffect(() => {
-    fetchJobs();
-  }, [search, location, employmentType, experienceLevel]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
+      setLoading(true);
+
       const params = {};
 
       if (search) params.search = search;
@@ -40,25 +40,46 @@ const JobList = () => {
 
       console.log("Request Params:", params);
 
-      const response = await axios.get(
-        "https://jobconnect-ai-powered-job-portal.onrender.com/api/jobs/",
-        {
-          params,
-        }
-      );
+      const response = await axios.get(API_URL, {
+        params,
+      });
 
-      console.log("API Response:", response.data);
+      console.log("Full API Response:", response.data);
 
-      const jobsData = response.data.results || response.data;
+      let jobsData = [];
 
-      console.log("Jobs:", jobsData);
+      if (Array.isArray(response.data)) {
+        jobsData = response.data;
+      } else if (
+        response.data &&
+        Array.isArray(response.data.results)
+      ) {
+        jobsData = response.data.results;
+      }
+
+      console.log("Jobs Received:", jobsData);
 
       setJobs(jobsData);
     } catch (error) {
-      console.log(error);
-      alert("Failed to load jobs.");
+      console.error("Failed to fetch jobs");
+      console.error(error);
+
+      if (error.response) {
+        console.log(error.response.data);
+      }
+
+      setJobs([]);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [search, location, employmentType, experienceLevel]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+  console.log("Jobs State:", jobs);
+  
 
   return (
     <div className="bg-gray-100 min-h-screen py-10">
@@ -88,7 +109,11 @@ const JobList = () => {
               Available Jobs
             </h2>
 
-            {jobs.length === 0 ? (
+            {loading ? (
+              <div className="bg-white rounded-xl shadow p-8 text-center">
+                Loading jobs...
+              </div>
+            ) : jobs.length === 0 ? (
               <div className="bg-white rounded-xl shadow p-8 text-center">
                 <h3 className="text-xl font-semibold">
                   No Jobs Found
