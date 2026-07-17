@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 
 import { AuthProvider } from "./context/AuthContext";
+import { JobProvider } from "./context/JobContext";
 
 // Pages
 import Dashboard from "./pages/Dashboard";
@@ -41,6 +42,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
+         <JobProvider>
         <div className="min-h-screen bg-gray-50">
 
           <main>
@@ -87,6 +89,7 @@ function App() {
           />
 
         </div>
+        </JobProvider>
       </AuthProvider>
     </Router>
   );
