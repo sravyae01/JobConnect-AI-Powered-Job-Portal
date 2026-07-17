@@ -184,12 +184,12 @@ CHANNEL_LAYERS = {
 # Cloudinary Configuration (for resume uploads)
 # Sign up at cloudinary.com and get your credentials
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'your-cloud-name',
-    'API_KEY': 'your-api-key',
-    'API_SECRET': 'your-api-secret',
+    "CLOUD_NAME": "qtemwlcv",
+    "API_KEY": "559217225888149",
+    "API_SECRET": "wi19qR6VWlD3U0dOLLN0_d_LJLc",
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
