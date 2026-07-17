@@ -11,11 +11,12 @@ SECRET_KEY = 'django-insecure-your-secret-key-here-change-in-production'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+
 ALLOWED_HOSTS = [
     ".onrender.com",
-    "127.0.0.1",
-    "localhost",
     ".vercel.app",
+    "localhost",
+    "127.0.0.1",
 ]
 
 # Application definition
@@ -135,12 +136,15 @@ AUTH_USER_MODEL = 'users.User'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-
-    "https://job-connect-ai-powered-job-portal-a9xgv5055-sravya-e-s-projects.vercel.app",
     "https://job-connect-ai-powered-job-portal.vercel.app",
 ]
 
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.vercel\.app$",
+]
+
 CORS_ALLOW_CREDENTIALS = True
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
