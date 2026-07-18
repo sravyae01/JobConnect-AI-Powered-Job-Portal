@@ -47,7 +47,7 @@ class UserProfile(models.Model):
     current_position = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
-    resume = models.FileField(upload_to="resumes/", blank=True, null=True)
+    resume = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
