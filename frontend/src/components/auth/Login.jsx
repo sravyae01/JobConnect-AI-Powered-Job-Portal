@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import { toast } from "react-toastify";
@@ -7,6 +8,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -94,16 +96,26 @@ const Login = () => {
               Password
             </label>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autoComplete="current-password"
-              required
-            />
+          <div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Enter your password"
+    value={formData.password}
+    onChange={handleChange}
+    className="w-full border rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    autoComplete="current-password"
+    required
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+  >
+    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+  </button>
+</div>
           </div>
 
           <div className="flex justify-between items-center">
