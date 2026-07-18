@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import API from "../../services/api";
@@ -7,6 +8,8 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -133,39 +136,61 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block font-medium mb-2">
-              Password
-            </label>
+         <div>
+  <label className="block font-medium mb-2">
+    Password
+  </label>
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              autoComplete="new-password"
-              className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+  <div className="relative">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      placeholder="Enter your password"
+      value={formData.password}
+      onChange={handleChange}
+      className="w-full border rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      required
+    />
 
-          <div>
-            <label className="block font-medium mb-2">
-              Confirm Password
-            </label>
+    <button
+      type="button"
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+    >
+      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+    </button>
+  </div>
+</div>
 
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              autoComplete="new-password"
-              className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+         <div>
+  <label className="block font-medium mb-2">
+    Confirm Password
+  </label>
+
+  <div className="relative">
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      name="password2"
+      placeholder="Confirm your password"
+      value={formData.password2}
+      onChange={handleChange}
+      className="w-full border rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      required
+    />
+
+    <button
+      type="button"
+      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+      className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+    >
+      {showConfirmPassword ? (
+        <EyeOff size={20} />
+      ) : (
+        <Eye size={20} />
+      )}
+    </button>
+  </div>
+</div>
 
           <div>
             <label className="block font-medium mb-2">
