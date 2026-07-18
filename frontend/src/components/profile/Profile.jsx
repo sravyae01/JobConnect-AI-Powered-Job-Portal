@@ -103,6 +103,8 @@ const Profile = () => {
       );
 
       setUser(response.data);
+      console.log(response.data);
+console.log(response.data.profile.resume);
 
       setFormData({
         first_name: response.data.first_name || "",
