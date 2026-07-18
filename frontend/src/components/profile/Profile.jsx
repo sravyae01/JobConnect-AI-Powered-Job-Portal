@@ -280,25 +280,13 @@ if (!user) {
           >
             Upload Resume
           </button>
-
-          {user.profile?.resume && (
-            <div className="mt-6">
-
-             <a
-  href={
-    user.profile.resume.startsWith("http")
-      ? user.profile.resume
-      : `https://jobconnect-ai-powered-job-portal.onrender.com${user.profile.resume}`
-  }
-  target="_blank"
-  rel="noopener noreferrer"
-  className="text-blue-600 font-semibold hover:underline"
->
-  📄 View Uploaded Resume
-</a>
-
-            </div>
-          )}
+{user.profile?.resume && (
+  <div className="mt-6">
+    <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-3 rounded-lg font-semibold">
+      ✅ Resume uploaded successfully.
+    </div>
+  </div>
+)}
 
         </div>
 
