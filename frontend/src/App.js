@@ -34,9 +34,6 @@ import JobList from "./components/jobs/JobList";
 // Authentication
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import ForgotPassword from "./components/auth/ForgotPassword";
-import VerifyOTP from "./components/auth/VerifyOTP";
-import ResetPassword from "./components/auth/ResetPassword";
 
 // Other Components
 import Companies from "./components/companies/Companies";
@@ -69,9 +66,6 @@ function Layout() {
           {/* Authentication */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/verify-otp" element={<VerifyOTP />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* Jobs */}
           <Route path="/jobs" element={<JobList />} />
