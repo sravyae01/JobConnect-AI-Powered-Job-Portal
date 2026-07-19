@@ -1,6 +1,6 @@
-# 🚀 JobConnect – AI-Powered Job Portal Platform
+# 🚀 JobConnect – AI-Powered Job Portal
 
-JobConnect is a modern full-stack job portal platform built using **React.js** and **Django REST Framework**. It provides a secure and user-friendly environment where employers can post and manage job openings, while job seekers can search, apply, and track job applications. The platform includes role-based authentication, resume management, dynamic job listings, company exploration, and a responsive user interface. The architecture is designed to support future AI-powered enhancements such as resume analysis and intelligent job recommendations.
+JobConnect is a modern full-stack job portal built using React.js and Django REST Framework. It provides a secure and user-friendly platform where employers can post and manage job openings, while job seekers can search, apply, and track job applications. The platform features role-based authentication, resume upload, dynamic job listings, company exploration, and a responsive user interface. The architecture is designed to support future AI-powered enhancements such as resume analysis and intelligent job recommendations.
 
 ---
 
@@ -10,12 +10,7 @@ JobConnect is a modern full-stack job portal platform built using **React.js** a
 - User Registration
 - User Login
 - JWT Authentication
-- Google Authentication
 - Role-Based Access Control (Employer & Job Seeker)
-- Forgot Password using Email OTP
-- Password Reset
-
----
 
 ## 👨‍💼 Employer Features
 - Employer Dashboard
@@ -25,8 +20,6 @@ JobConnect is a modern full-stack job portal platform built using **React.js** a
 - View Posted Jobs
 - View Applicants
 - Dashboard Statistics
-
----
 
 ## 👨‍🎓 Job Seeker Features
 - Browse Available Jobs
@@ -39,24 +32,18 @@ JobConnect is a modern full-stack job portal platform built using **React.js** a
 - Track Applied Jobs
 - User Profile Management
 - Upload Resume
-- View Uploaded Resume
-
----
+- Save Jobs
 
 ## 🏢 Companies
 - Dynamic Company Listings
 - Company Search
 - View Jobs by Company
 
----
-
 ## 📝 Career Blog
 - Career Guidance Articles
 - Resume Tips
 - Interview Preparation Tips
 - Job Search Guidance
-
----
 
 ## 🎨 User Interface
 - Responsive Design
@@ -83,10 +70,16 @@ JobConnect is a modern full-stack job portal platform built using **React.js** a
 - Django
 - Django REST Framework
 - JWT Authentication
-- Django Filter
-- SQLite
 
-## Programming Language
+## Database
+- MySQL
+
+## Cloud & Deployment
+- Cloudinary (Resume Upload)
+- Render (Backend)
+- Vercel (Frontend)
+
+## Programming Languages
 - Python
 - JavaScript
 
@@ -94,7 +87,7 @@ JobConnect is a modern full-stack job portal platform built using **React.js** a
 
 # 📂 Project Structure
 
-```text
+```
 JobConnect/
 │
 ├── backend/
@@ -122,45 +115,45 @@ JobConnect/
 
 ## Backend Setup
 
-Create a virtual environment
+### Create a virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-Activate the virtual environment
+### Activate the virtual environment
 
-### Windows
+**Windows**
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Linux / macOS
+**Linux / macOS**
 
 ```bash
 source venv/bin/activate
 ```
 
-Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Apply database migrations
+### Apply database migrations
 
 ```bash
 python manage.py migrate
 ```
 
-Start the backend server
+### Start the backend server
 
 ```bash
 python manage.py runserver
 ```
 
-Backend will run on:
+Backend URL:
 
 ```
 https://jobconnect-ai-powered-job-portal.onrender.com/
@@ -170,19 +163,19 @@ https://jobconnect-ai-powered-job-portal.onrender.com/
 
 ## Frontend Setup
 
-Install dependencies
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-Start the React development server
+### Start the React development server
 
 ```bash
 npm start
 ```
 
-Frontend will run on:
+Frontend URL:
 
 ```
 http://localhost:3000/
@@ -201,6 +194,7 @@ http://localhost:3000/
 - Company Listings
 - Candidate Profile
 - Resume Upload
+- Saved Jobs
 - My Applications
 - Career Blog
 
@@ -209,8 +203,8 @@ http://localhost:3000/
 # 🔮 Future Enhancements
 
 - AI Resume Analyzer
-- Company Profile Pages
 - AI Job Recommendation System
+- Company Profile Pages
 - Saved Jobs Enhancement
 - Email Notifications
 - Interview Scheduling
@@ -231,6 +225,6 @@ Bengaluru, Karnataka, India
 
 ---
 
-## 📄 License
+# 📄 License
 
 This project is developed for educational, learning, and portfolio purposes.
